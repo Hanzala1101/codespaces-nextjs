@@ -1,71 +1,51 @@
-import { useCallback, useEffect, useState } from 'react'
-import Button from '../components/Button'
-import ClickCount from '../components/ClickCount'
-import styles from '../styles/home.module.css'
+import React, { useEffect, useState } from 'react'
+import Card from "/components/card";
+import axios from "axios";
+import air1 from '../assets/thermometer.png'
+import air2 from "../assets/humidity.png" 
+import air3 from "../assets/wind-sign.png"
+import air4 from "../assets/idea.png" 
+import air5 from "../assets/air.png" 
 
-function throwError() {
-  console.log(
-    // The function body() is not defined
-    document.body()
-  )
-}
+export default function index() {
+  const [wData, setwData] = useState([])
+  const [wData1, setwData1] = useState([])
 
-function Home() {
-  const [count, setCount] = useState(0)
-  const increment = useCallback(() => {
-    setCount((v) => v + 1)
-  }, [setCount])
-
-  useEffect(() => {
-    const r = setInterval(() => {
-      increment()
-    }, 1000)
-
-    return () => {
-      clearInterval(r)
-    }
-  }, [increment])
-
+  const url = "https://api.thingspeak.com/channels/2302325/feeds.json"
+  const fetchdata = async () => await axios.get(url).then((res) => setwData(res.data.feeds[0]))
+  const fetchdataAll = async () => await axios.get(url).then((res) => setwData1(res.data.feeds))
+  useEffect(async () => {
+    fetchdata();
+    fetchdataAll();
+  }, []);
+  console.log(wData)
+const image1=air1
+const image2=air2
+const image3=air3
+const image4=air4
+const image5=air5
   return (
-    <main className={styles.main}>
-      <h1>Fast Refresh Demo</h1>
-      <p>
-        Fast Refresh is a Next.js feature that gives you instantaneous feedback
-        on edits made to your React components, without ever losing component
-        state.
-      </p>
-      <hr className={styles.hr} />
-      <div>
-        <p>
-          Auto incrementing value. The counter won't reset after edits or if
-          there are errors.
-        </p>
-        <p>Current value: {count}</p>
+    <>
+      <div className='w-screen h-screen flex justify-center items-center mt-10' >
+        <div className='w-[1024px] h-full'>
+          <h1 className='font-bold text-3xl mb-5'>
+            Weather
+          </h1>
+          <div className='grid grid-cols-2 gap-4'>
+            <Card name="Temperature" value={(!wData.field1) ? 32 : wData.field1} image={image1}/>
+            <Card name="Humidity" value={(!wData.field2) ? 50 : wData.field2} image={image2}/>
+            <Card name="ATM Pressure (pa)" value={(!wData.field3) ? 1 : wData.field3} image={image3}/>
+            <Card name="Light Intensity" value={(!wData.field4) ? 55 : wData.field4} image={image4}/>
+            <Card name="Air Quality" value={(!wData.field5) ? 90 : wData.field5} image={image5}/>
+          </div>
+          <div className='flex overflow-x-scroll w-[1024px] mt-10'>
+              {wData1.slice(0,20).map(()=>{
+                return(
+                <Card name="Temperature" value={(!wData.field1) ? 32 : wData.field1} image={image1}/>)
+              })}
+          </div>
+        </div>
       </div>
-      <hr className={styles.hr} />
-      <div>
-        <p>Component with state.</p>
-        <ClickCount />
-      </div>
-      <hr className={styles.hr} />
-      <div>
-        <p>
-          The button below will throw 2 errors. You'll see the error overlay to
-          let you know about the errors but it won't break the page or reset
-          your state.
-        </p>
-        <Button
-          onClick={(e) => {
-            setTimeout(() => document.parentNode(), 0)
-            throwError()
-          }}
-        >
-          Throw an Error
-        </Button>
-      </div>
-      <hr className={styles.hr} />
-    </main>
+    </>
   )
 }
-
-export default Home
