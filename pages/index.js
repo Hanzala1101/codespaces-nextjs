@@ -27,21 +27,28 @@ const image5=air5
   return (
     <>
       <div className='w-screen h-screen flex justify-center items-center mt-10' >
-        <div className='w-[1024px] h-full'>
+        <div className='md:w-[1024px] w-[384px] h-full'>
           <h1 className='font-bold text-3xl mb-5'>
-            Weather
+            Weather Monitoring
           </h1>
-          <div className='grid grid-cols-2 gap-4'>
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
             <Card name="Temperature" value={(!wData.field1) ? 32 : wData.field1} image={image1}/>
             <Card name="Humidity" value={(!wData.field2) ? 50 : wData.field2} image={image2}/>
             <Card name="ATM Pressure (pa)" value={(!wData.field3) ? 1 : wData.field3} image={image3}/>
             <Card name="Light Intensity" value={(!wData.field4) ? 55 : wData.field4} image={image4}/>
             <Card name="Air Quality" value={(!wData.field5) ? 90 : wData.field5} image={image5}/>
           </div>
-          <div className='flex overflow-x-scroll w-[1024px] mt-10'>
+          <div className='flex overflow-x-scroll sm:w-[1024px] w-screen px-10 mt-10'>
               {wData1.slice(0,20).map(()=>{
                 return(
-                <Card name="Temperature" value={(!wData.field1) ? 32 : wData.field1} image={image1}/>)
+                  <>
+                  <Card name="Temperature" value={(!wData.field1) ? 32 : wData.field1} image={image1}/>
+                  <Card name="Humidity" value={(!wData.field2) ? 50 : wData.field2} image={image2}/>
+                  <Card name="ATM Pressure (pa)" value={(!wData.field3) ? 1 : wData.field3} image={image3}/>
+                  <Card name="Light Intensity" value={(!wData.field4) ? 55 : wData.field4} image={image4}/>
+                  <Card name="Air Quality" value={(!wData.field5) ? 90 : wData.field5} image={image5}/>
+                  </>)
+
               })}
           </div>
         </div>
